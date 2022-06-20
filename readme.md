@@ -335,3 +335,182 @@ Limitations:
 
 - Cannot inject constructor arguments to object classes
   - Can use Spring to handle constructors and use constructor injection
+
+### Companion Object
+
+- Kotlin does not support for the **static** keyword
+- **Companion Object** can be used to introduce static functions and variables
+that are tied to a class
+- Static items in a companion object do not need an instance of that class to be invoked
+- Variables inside a companion object are recommended to have the `const` keyword
+
+```kotlin
+class Student(name: String, override val age: Int = 0) : User(name, age) {
+    
+    companion object {
+        const val noOfEnrolledCourses = 10
+      
+      fun country(): String {
+          return "USA"
+      }
+    }
+}
+```
+
+## Interfaces
+
+- Defines the contract which has some abstract methods
+  - Interface abstract functions do not have any logic in them
+    - Any class that implements the interface handles the logic
+- Similar to Java, but Kotlin interfaces can have abstract and non-abstract
+methods in them
+  - Still have the opportunity to override a non-abstract method from an interface
+in the implementing class
+- Interfaces cannot contain any state
+- A class can inherit from multiple interfaces, but cannot extend more than one class
+
+```kotlin
+interface CourseRepository {
+    fun getById(id: Int): Course
+}
+
+//implementation
+class SqlCourseRepository: CourseRepository {
+    override fun getById(id: Int): Course{
+        return Course(
+          id = id,
+          "Programming using Spring and Kotlin",
+          "bob"
+        )
+    }
+}
+
+//interface with abstract and non-abstract methods
+interface CourseRepository {
+    fun getById(id: Int): Course
+    
+    fun save(course: Course): Int {
+        println("course: $course")
+        return course.id
+    }
+}
+```
+
+### Handling conflicting functions
+
+Handling conflicting functions can be handled with some Generics
+
+```kotlin
+override fun doSomething() {
+        super<A>.doSomething()
+        super<B>.doSomething()
+        println("do something in AB")
+    }
+```
+
+### Defining and Overriding Variables
+
+Can persist variables in an interface
+
+## Visibility Modifiers
+
+4 modifiers in Kotlin:
+- public
+  - Default modifier, applied if none are explicitly added
+- protected
+  - Visible in the class and any subclasses
+- private
+  - Marks the function or variable accessibly only to that class
+- internal
+  - New to Kotlin
+  - Private to the module that's published using Gradle or Maven
+
+## Type Checking, Casting, and Smart Cast
+
+### is
+
+- Check a particular value is of a certain type
+  - Same as `instance of` operator in Java
+- Returns a boolean
+
+```kotlin
+val name = "bob"
+val result = name is String
+```
+
+### as
+
+- Cast a value to a certain type
+- If cast is not possible, throws `java.lang.ClassCastException`
+
+```kotlin
+val name = "bob" as String
+```
+
+#### as?
+
+Will only perform the casting if it is possible
+
+### Manual Casting
+
+In Kotlin, have to be explicit about manually casting a type in order to avoid
+a `ClassCastException`
+
+### Smart Casting
+
+Once Kotlin has identified the type through an **as** or **is**, then no longer
+needs a type assignment to that object
+
+## Enum
+
+## Nullable and Non-nullable types
+
+### Nulls in Kotlin
+
+- Kotlin handles nulls differently than Java
+- Kotlin has the concept of **Nullable** and *Non-nullable** types
+- These can be assigned to variables or properties in a class
+
+#### Nullable Type
+
+- A variable or property can hold a null value, or a valid value for its type
+- noted with a `?` symbol after the variable or property
+
+```kotlin
+val nameNullable: String? = null
+
+//or
+
+val nameNullable: String? = "bob"
+```
+
+#### Non-nullable type
+
+- A variable or property can hold only a non-null value
+- By default types are non-nullable whenever declared without a `?`
+- Null value is not allowed, and will thrown an exception at compilation
+
+### Dealing with Null Values
+
+Could wrap around a if (value != null), but that's Java
+
+#### Safe Call
+
+- `?`
+- Use the safe call operator to invoke functions safely on it
+- perform this operation, only if value is not null, or return null
+
+#### Elvis Operator
+
+- `?:`
+- Return a default value if null
+- use the value, or perform the following if null
+
+
+#### Non Null Assertion
+
+- `!!`
+- Making sure the value is not null after some updates or operations
+
+### Assigning a nullable type to a non nullable type
+
