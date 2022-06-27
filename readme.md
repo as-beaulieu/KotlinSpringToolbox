@@ -514,3 +514,177 @@ Could wrap around a if (value != null), but that's Java
 
 ### Assigning a nullable type to a non nullable type
 
+## Collections
+
+Kotlin reuses the collections from Java
+
+Added a lot to default collections through extension functions
+
+Kotlin can still infer types in the collections
+
+Two types of collections: Mutable and Immutable
+
+### Immutable
+
+- Not modified once created
+
+```kotlin
+val names = listOf("bob", "bill", "susan")
+
+hashMapOf("bob" to 33, "susan" to 38)
+```
+
+### Mutable
+
+- Modifying the data in the collection is allowed
+
+```kotlin
+val namesMutableList = mutableListOf("bob", "bill", "susan")
+
+mutableMapOf("doug" to 33, "Kathy" to 28)
+```
+
+## Lambda Expressions
+
+A small piece of code that can be passed to other functions
+
+```
+{ x: Int -> x * x }
+Lambda      Lambda
+Input       Body
+Argument
+```
+
+- You can assign the behavior to a variable
+- Have to assign a type; there is no type inference in lambdas
+
+### Lambdas and High Order Functions
+
+High order functions accept other functions in their parameters, or returns another function
+
+If you have the lambda as the last parameter in a Kotlin High Order Function, can move it out of the
+parenthesis
+
+## Filters and operations on collections
+
+### Filter
+
+```kotlin 
+val numList = listOf(1, 2, 3, 4, 5, 6)
+
+val result = numList.filter {
+  it >= 5
+}
+```
+
+## map operations
+
+- Used to transfer the elements from one form into another form
+
+```kotlin
+val numList = listOf(1, 2, 3, 4, 5, 6)
+
+numList.map{
+    it.toDouble()
+}
+```
+
+### flatMap
+
+- used if the collection has another collection
+- Used to flatten the list of lists that is being operated on and
+returns a single list
+
+### hashmaps
+
+### getOrElse()
+
+- if the value is not present, can set the value
+
+```kotlin
+val something = mutableMapOf("mary" to 33)
+val value = something.getOrElse("bob") {"abc"}
+```
+
+### .containsKey
+
+- will return a boolean on if the given key is present in the collection
+
+### Lazy Evaluation of Collections using Sequences
+
+- An alternative API to work with collections
+- Operations on elements of the collection are evaluated lazily
+- Sequences perform better when dealing with collections that are
+extremely big
+  - Does not create intermediate collection for each operator
+  - Sequences are lazy, does not apply the operations for all the elements
+in the collection
+  - Also requires a terminal operator to transform away from a sequence
+
+```kotlin
+val namesListUsingSequence = listOf("bob", "mary")
+  .asSequence()
+  .filter { it.lengty >= 4 }
+  .map { it.uppercase() }
+  .toList() // Terminal Operator for pipeline
+```
+
+### nullability in collections
+
+## Exceptions in Kotlin
+
+- All exceptions in Kotlin extends the Throwable class
+- Kotlin does not have checked exceptions
+- try/catch blocks work much like in Java
+  - the try/catch block in Kotlin is an expression
+
+### Nothing type
+
+A type that has no instances. a function that returns a Nothing type
+will always throw an exception
+
+## Scope Functions
+
+https://kotlinlang.org/docs/scope-functions.html
+
+- These functions are an enhancement from Kotlin
+- They execute a piece of code within the context of the object
+- These functions form a **temporary scope**
+- Accepts a lambda and has access to the value of the object
+- **let**, **run**, **with**, **apply**, and **also**
+- Can chain multiple scoping functions together
+
+### **_apply_** and **_also_**
+
+- both return the context object, and is an extension function
+- **_apply_** is used for object configuration
+- **_also_** is used for additional effects
+
+### _this_ and _it_
+
+- both are the context object in the scope function lambda
+- _this_ is used as a lambda receiver
+  - Usually don't have to provide the _this_ reference
+  - Example: `$length` instead of `$this.length`
+- _it_ is used as a lambda argument
+
+### let
+
+- the context object is available as an argument `it`
+- the return value is the lambda result
+- _**let**_ can be used to invoke one or more functions on results
+of call chains
+
+### _with_ and _run_
+
+- These two scoping functions are not extension functions
+- context object is passed as an argument
+  - but inside the lambda it's available as a receiver
+- return value is the lambda result
+- **_with_** is best for operating on the context object itself
+- _**run**_ invokes as `let` - an extension function of the context object
+  - But can be ran like a `when` without applying directly to a specific object
+- **_run_** is useful when your lambda contains both the object initialization and the
+computation of the return value
+
+
